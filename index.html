@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ElectroShop</title>
+<style>
+body {font-family: Arial; margin:0; background:#eef2f7;}
+header {background:#007bff; color:#fff; padding:15px; text-align:center;}
+.container {display:flex; flex-wrap:wrap; justify-content:center; padding:20px;}
+.card {background:#fff; width:250px; margin:15px; border-radius:15px; overflow:hidden; box-shadow:0 6px 15px rgba(0,0,0,0.2); transition:transform 0.2s, box-shadow 0.2s;}
+.card img {width:100%; height:180px; object-fit:cover;}
+.card h3 {padding:10px; margin:0;}
+.price {color:#27ae60; font-weight:bold; padding:0 10px;}
+.details {padding:10px; font-size:14px;}
+button {margin:10px; padding:10px; border:none; background:#25D366; color:#fff; border-radius:8px; cursor:pointer; width:90%;}
+.card:hover {transform:translateY(-5px); box-shadow:0 10px 20px rgba(0,0,0,0.3);}
+.product-page {display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center;}
+.product-box {background:#fff; padding:20px; border-radius:12px; width:90%; max-width:500px; text-align:center;}
+.product-box img {width:100%; max-height:300px; object-fit:cover; margin-bottom:10px; border:3px solid #007bff;}
+.thumbnails {display:flex; justify-content:center; margin-bottom:10px;}
+.thumbnails img {width:60px; height:60px; object-fit:cover; margin:0 5px; cursor:pointer; border:2px solid #ccc; border-radius:5px;}
+.thumbnails img:hover {border-color:#007bff;}
+input {width:90%; padding:10px; margin:8px 0;}
+</style>
+</head>
+<body>
+
+<header>
+<h1>ElectroShop</h1>
+<p>Commande via WhatsApp</p>
+</header>
+
+<div class="container">
+<!-- Produit 1 -->
+<div class="card">
+  <img src="image/linkassassins1.jpg.jpg" alt="Assassin's Creed Unity">
+  <h3>Assassin's Creed Unity</h3>
+  <p class="price">45 DT</p>
+  <div class="details">قابل النقاش</div>
+  <button onclick="openProductPage('Assassin\'s Creed Unity',['image/linkassassins2.jpg.],45,'قابل النقاش')">Voir Détails</button>
+</div>
+
+<!-- Produit 2 -->
+<div class="card">
+  <img src="linkneed1.jpg.jpg" alt="Need for Speed Payback">
+  <h3>Need for Speed Payback</h3>
+  <p class="price">45 DT</p>
+  <div class="details">قابل النقاش</div>
+  <button onclick="openProductPage('Need for Speed Payback',['linkneed2.jpg.jpg'],45,'قابل النقاش')">Voir Détails</button>
+</div>
+
+<!-- Produit 3 -->
+<div class="card">
+  <img src="linkwatch1.jpg.jpg" alt="Watch Dogs 2">
+  <h3>Watch Dogs 2</h3>
+  <p class="price">50 DT</p>
+  <div class="details">قابل النقاش</div>
+  <button onclick="openProductPage('Watch Dogs 2',['linkwatch2.jpg.jpg'],50,'قابل النقاش')">Voir Détails</button>
+</div>
+
+<!-- Produit 4 -->
+<div class="card">
+  <img src="linkcharj1.jpg.jpg" alt="Chargeur iPhone">
+  <h3>Chargeur iPhone</h3>
+  <p class="price">40 DT</p>
+  <div class="details">قابل النقاش</div>
+  <button onclick="openProductPage('Chargeur iPhone',,40,'قبل النقاش')">Voir Détails</button>
+</div>
+
+<!-- Produit 5 -->
+<div class="card">
+  <img src="linklamp1.jpg.jpg" alt="3 Lampes">
+  <h3>3 Lampes</h3>
+  <p class="price">15 DT</p>
+  <div class="details">قابل النقاش</div>
+  <button onclick="openProductPage('3 Lampes',['linklamp.jpg.jpg'],15,'قابل النقاش')">Voir Détails</button>
+</div>
+
+</div>
+
+<!-- Product Page -->
+<div class="product-page" id="productPage">
+  <div class="product-box">
+    <img id="mainImage" src="">
+    <div class="thumbnails"></div>
+    <h2 id="productName"></h2>
+    <p id="productPrice"></p>
+    <p id="productDesc"></p>
+    <input type="text" id="nom" placeholder="Nom">
+    <input type="text" id="prenom" placeholder="Prénom">
+    <input type="text" id="numero" placeholder="Téléphone">
+    <button onclick="sendOrder()">Send via WhatsApp</button>
+    <button onclick="closeProductPage()">Fermer</button>
+  </div>
+</div>
+
+<script>
+let selectedProduct = '';
+let selectedPrice = 0;
+let selectedDesc = '';
+let selectedImages = [];
+
+function openProductPage(name, images, price, desc){
+  selectedProduct = name;
+  selectedPrice = price;
+  selectedDesc = desc;
+  selectedImages = images;
+
+  document.getElementById('mainImage').src = images[0];
+  document.getElementById('productName').innerText = name;
+  document.getElementById('productPrice').innerText = price + " DT";
+  document.getElementById('productDesc').innerText = desc;
+
+  const thumbsContainer = document.querySelector('.thumbnails');
+  thumbsContainer.innerHTML = '';
+  images.forEach(src => {
+    let img = document.createElement('img');
+    img.src = src;
+    img.classList.add('thumb');
+    img.onclick = () => changeImage(src);
+    thumbsContainer.appendChild(img);
+  });
+
+  document.getElementById('productPage').style.display = 'flex';
+}
+
+function changeImage(src){
+  document.getElementById('mainImage').src = src;
+}
+
+function closeProductPage(){
+  document.getElementById('productPage').style.display = 'none';
+}
+
+function sendOrder(){
+  const nom = document.getElementById('nom').value;
+  const prenom = document.getElementById('prenom').value;
+  const numero = document.getElementById('numero').value;
+
+  if(nom && prenom && numero){
+    const message = `🛒 Nouvelle Commande
+Produit: ${selectedProduct}
+Prix: ${selectedPrice} DT
+Description: ${selectedDesc}
+Nom: ${nom} ${prenom}
+Tel: ${numero}`;
+
+    let phone1 = '21628804353';
+    let phone2 = '21628094237';
+
+    window.open(`https://wa.me/${phone1}?text=${encodeURIComponent(message)}`, '_blank');
+    window.open(`https://wa.me/${phone2}?text=${encodeURIComponent(message)}`, '_blank');
+
+    closeProductPage();
+  } else {
+    alert('Remplis les champs !');
+  }
+}
+</script>
+
+</body>
+</html>
+<style>
+/* نفس ستايلك الأصلي مع إضافة الحدود الزرقاء عند hover */
+.card {
+  background:#fff;
+  width:250px;
+  margin:15px;
+  border-radius:15px;
+  overflow:hidden;
+  box-shadow:0 6px 15px rgba(0,0,0,0.2);
+  transition: transform 0.2s, box-shadow 0.2s, border 0.2s;
+  border: 2px solid transparent; /* البداية بدون حدود */
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+  border: 2px solid #007bff; /* الحد الأزرق عند hover */
+}
+
+.card img {
+  width:100%;
+  height:180px;
+  object-fit:cover;
+}
+
+.card h3 {
+  padding:10px;
+  margin:0;
+}
+
+.price {
+  color:#27ae60;
+  font-weight:bold;
+  padding:0 10px;
+}
+
+.details {
+  padding:10px;
+  font-size:14px;
+}
+
+button {
+  margin:10px;
+  padding:10px;
+  border:none;
+  background:#25D366;
+  color:#fff;
+  border-radius:8px;
+  cursor:pointer;
+  width:90%;
+}
+</style>
